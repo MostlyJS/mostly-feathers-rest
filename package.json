@@ -25,6 +25,7 @@
     "feathers-errors": "^2.6.3",
     "heavy": "^4.0.3",
     "lodash": "^4.17.4",
+    "nats": "^0.7.16",
     "nats-hemera": "^1.0.1",
     "tinysonic": "^1.2.0"
   },

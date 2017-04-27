@@ -15,7 +15,7 @@ function formatter(req, res, next) {
   });
 }
 
-export default function rest(app, path = '/', handler = formatter) {
+export default function rest(app, mostly, path = '/', handler = formatter) {
   // Register the REST provider
   const uri = path.indexOf('/') === 0 ? path : `/${path}`;
   const baseRoute = app.route(`${uri}:__service`);
@@ -24,24 +24,24 @@ export default function rest(app, path = '/', handler = formatter) {
   debug(`Adding REST handler for service route \`${uri}\``);
 
   // GET / -> find(cb, params)
-  baseRoute.get(wrappers.find);
+  baseRoute.get(wrappers.find(mostly), handler);
   // POST / -> create(data, params, cb)
-  baseRoute.post(wrappers.create);
+  baseRoute.post(wrappers.create(mostly), handler);
   // PATCH / -> patch(null, data, params)
-  baseRoute.patch(wrappers.patch);
+  baseRoute.patch(wrappers.patch(mostly), handler);
   // PUT / -> update(null, data, params)
-  baseRoute.put(wrappers.update);
+  baseRoute.put(wrappers.update(mostly), handler);
   // DELETE / -> remove(null, params)
-  baseRoute.delete(wrappers.remove);
+  baseRoute.delete(wrappers.remove(mostly), handler);
 
   // GET /:id -> get(id, params, cb)
-  idRoute.get(wrappers.get);
+  idRoute.get(wrappers.get(mostly), handler);
   // PUT /:id -> update(id, data, params, cb)
-  idRoute.put(wrappers.update);
+  idRoute.put(wrappers.update(mostly), handler);
   // PATCH /:id -> patch(id, data, params, callback)
-  idRoute.patch(wrappers.patch);
+  idRoute.patch(wrappers.patch(mostly), handler);
   // DELETE /:id -> remove(id, params, cb)
-  idRoute.delete(wrappers.remove);
+  idRoute.delete(wrappers.remove(mostly), handler);
 
   return function (req, res, next) {
 

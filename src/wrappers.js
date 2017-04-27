@@ -18,7 +18,7 @@ const allowedMethods = {
 
 // A function that returns the middleware for a given method
 // `getArgs` is a function that should return additional leading service arguments
-function getHandler (method, getArgs) {
+function getHandler (method, getArgs, mostly) {
   return function (req, res, next) {
     res.setHeader('Allow', Object.values(allowedMethods).join(','));
 
@@ -30,10 +30,11 @@ function getHandler (method, getArgs) {
     params = Object.assign({ query: req.query || {} }, params, req.payloads);
 
     // Run the getArgs callback, if available, for additional parameters
-    const args = getArgs(req, res, next);
+    const [service, ...args] = getArgs(req, res, next);
 
     // The service success callback which sets res.data or calls next() with the error
     const callback = function (error, data) {
+      debug(' ==> service response:', data);
       res.data = data;
 
       if (!data) {
@@ -46,11 +47,16 @@ function getHandler (method, getArgs) {
       return next();
     };
 
-    debug(`REST handler calling \`${method}\` from \`${req.url}\``);
+    debug(`REST handler calling service \`${service}\`, cmd \`${method}\`, with \`${args}\``);
 
+    mostly.act({
+      topic: service,
+      cmd: method,
+      args: args,
+      params: params
+    }, callback);
     // TODO
     //service[method].apply(service, args.concat([ params, callback ]));
-    callback(null, {});
   };
 }
 
@@ -76,10 +82,10 @@ function reqCreate (req) {
 
 // Returns wrapped middleware for a service method.
 export default {
-  find: getHandler('find', reqNone),
-  get: getHandler('get', reqId),
-  create: getHandler('create', reqCreate),
-  update: getHandler('update', reqUpdate),
-  patch: getHandler('patch', reqUpdate),
-  remove: getHandler('remove', reqId)
+  find: getHandler.bind(null, 'find', reqNone),
+  get: getHandler.bind(null, 'get', reqId),
+  create: getHandler.bind(null, 'create', reqCreate),
+  update: getHandler.bind(null, 'update', reqUpdate),
+  patch: getHandler.bind(null, 'patch', reqUpdate),
+  remove: getHandler.bind(null, 'remove', reqId)
 };
