@@ -23,7 +23,7 @@ function getHandler (method, getArgs) {
     res.setHeader('Allow', Object.values(allowedMethods).join(','));
 
     let params = Object.assign({}, req.params || {});
-    delete params.__serivce;
+    delete params.__service;
     delete params.__id;
 
     // Grab the service parameters. Use req.payloads and set the query to req.query
@@ -55,23 +55,23 @@ function getHandler (method, getArgs) {
 }
 
 // Returns no leading parameters
-function reqNone () {
-  return [ req.params.__serivce ];
+function reqNone (req) {
+  return [ req.params.__service ];
 }
 
 // Returns the leading parameters for a `get` or `remove` request (the id)
 function reqId (req) {
-  return [ req.params.__serivce, req.params.__id || null ];
+  return [ req.params.__service, req.params.__id || null ];
 }
 
 // Returns the leading parameters for an `update` or `patch` request (id, data)
 function reqUpdate (req) {
-  return [ req.params.__serivce, req.params.__id || null, req.body ];
+  return [ req.params.__service, req.params.__id || null, req.body ];
 }
 
 // Returns the leading parameters for a `create` request (data)
 function reqCreate (req) {
-  return [ req.params.__serivce, req.body ];
+  return [ req.params.__service, req.body ];
 }
 
 // Returns wrapped middleware for a service method.

@@ -21,27 +21,27 @@ export default function rest(app, path = '/', handler = formatter) {
   const baseRoute = app.route(`${uri}:__service`);
   const idRoute = app.route(`${uri}:__service/:__id`);
 
-  debug(`Adding REST provider for service \`${path}\` at base route \`${uri}\``);
+  debug(`Adding REST handler for service route \`${uri}\``);
 
-  // GET / -> service.find(cb, params)
+  // GET / -> find(cb, params)
   baseRoute.get(wrappers.find);
-  // POST / -> service.create(data, params, cb)
+  // POST / -> create(data, params, cb)
   baseRoute.post(wrappers.create);
-  // PATCH / -> service.patch(null, data, params)
+  // PATCH / -> patch(null, data, params)
   baseRoute.patch(wrappers.patch);
-  // PUT / -> service.update(null, data, params)
-  baseRoute.put.apply(wrappers.update);
-  // DELETE / -> service.remove(null, params)
-  baseRoute.delete.apply(wrappers.remove);
+  // PUT / -> update(null, data, params)
+  baseRoute.put(wrappers.update);
+  // DELETE / -> remove(null, params)
+  baseRoute.delete(wrappers.remove);
 
-  // GET /:id -> service.get(id, params, cb)
-  idRoute.get.apply(wrappers.get);
-  // PUT /:id -> service.update(id, data, params, cb)
-  idRoute.put.apply(wrappers.update);
-  // PATCH /:id -> service.patch(id, data, params, callback)
-  idRoute.patch.apply(wrappers.patch);
-  // DELETE /:id -> service.remove(id, params, cb)
-  idRoute.delete.apply(wrappers.remove);
+  // GET /:id -> get(id, params, cb)
+  idRoute.get(wrappers.get);
+  // PUT /:id -> update(id, data, params, cb)
+  idRoute.put(wrappers.update);
+  // PATCH /:id -> patch(id, data, params, callback)
+  idRoute.patch(wrappers.patch);
+  // DELETE /:id -> remove(id, params, cb)
+  idRoute.delete(wrappers.remove);
 
   return function (req, res, next) {
 
