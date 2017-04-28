@@ -33,8 +33,10 @@ function getHandler (method, getArgs, mostly) {
     const [service, ...args] = getArgs(req, res, next);
 
     // The service success callback which sets res.data or calls next() with the error
-    const callback = function (error, data) {
-      debug(' ==> service response:', data);
+    const callback = function (err, data) {
+      debug(' ==> service response:', err, data);
+      if (err) return next(err.cause || err);
+
       res.data = data;
 
       if (!data) {
@@ -50,13 +52,11 @@ function getHandler (method, getArgs, mostly) {
     debug(`REST handler calling service \`${service}\`, cmd \`${method}\`, with \`${args}\``);
 
     mostly.act({
-      topic: service,
+      topic: `service:${service}`,
       cmd: method,
       args: args,
       params: params
     }, callback);
-    // TODO
-    //service[method].apply(service, args.concat([ params, callback ]));
   };
 }
 

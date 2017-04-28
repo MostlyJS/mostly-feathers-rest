@@ -26,6 +26,7 @@ node_modules
 
 # Users Environment Variables
 .lock-wscript
+.DS_store
 
 # The compiled/babelified modules
 lib/
