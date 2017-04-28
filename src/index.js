@@ -1,7 +1,7 @@
 import makeDebug from 'debug';
 import wrappers from './wrappers';
 
-const debug = makeDebug('mostly:rest');
+const debug = makeDebug('mostly:feathers:rest');
 
 function formatter(req, res, next) {
   if (res.data === undefined) {
@@ -15,11 +15,11 @@ function formatter(req, res, next) {
   });
 }
 
-export default function rest(app, mostly, path = '/', handler = formatter) {
+export default function rest(app, mostly, path, handler = formatter) {
   // Register the REST provider
-  const uri = path.indexOf('/') === 0 ? path : `/${path}`;
-  const baseRoute = app.route(`${uri}:__service`);
-  const idRoute = app.route(`${uri}:__service/:__id`);
+  const uri = path || '';
+  const baseRoute = app.route(`${uri}/:__service`);
+  const idRoute = app.route(`${uri}/:__service/:__id`);
 
   debug(`Adding REST handler for service route \`${uri}\``);
 

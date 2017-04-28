@@ -1,6 +1,7 @@
+import _ from 'lodash';
 import makeDebug from 'debug';
 
-const debug = makeDebug('mostly:rest:wrappers');
+const debug = makeDebug('mostly:feathers:rest:wrappers');
 
 const statusCodes = {
   created: 201,
@@ -21,7 +22,7 @@ const allowedMethods = {
 // `getArgs` is a function that should return additional leading service arguments
 function getHandler (method, getArgs, mostly) {
   return function (req, res, next) {
-    res.setHeader('Allow', Object.values(allowedMethods).join(','));
+    res.setHeader('Allow', _.uniq(Object.values(allowedMethods)).join(','));
 
     let params = Object.assign({}, req.params || {});
     delete params.__service;
