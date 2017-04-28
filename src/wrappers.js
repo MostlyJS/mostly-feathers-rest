@@ -7,6 +7,7 @@ const statusCodes = {
   noContent: 204,
   methodNotAllowed: 405
 };
+
 const allowedMethods = {
   find:   'GET',
   get:    'GET',
@@ -52,7 +53,7 @@ function getHandler (method, getArgs, mostly) {
     debug(`REST handler calling service \`${service}\`, cmd \`${method}\`, with \`${args}\``);
 
     mostly.act({
-      topic: `service:${service}`,
+      topic: `feathers.${service}`,
       cmd: method,
       args: args,
       params: params
