@@ -20,21 +20,24 @@
     "test": "npm run compile && npm run lint && npm run coverage"
   },
   "dependencies": {
-    "bloomrun": "^3.0.4",
-    "express": "^4.15.2",
-    "feathers-errors": "^2.6.3",
-    "heavy": "^4.0.3",
-    "lodash": "^4.17.4",
-    "nats": "^0.7.16",
-    "nats-hemera": "^1.0.1",
-    "tinysonic": "^1.2.0"
+    "debug": "^2.6.6",
+    "gulp-watch": "^4.3.11",
+    "lodash": "^4.17.4"
   },
   "devDependencies": {
     "babel-core": "^6.24.1",
+    "babel-eslint": "^7.2.3",
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-root-import": "^5.1.0",
     "babel-preset-env": "^1.4.0",
     "eslint-if-supported": "^1.0.1",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-changed": "^3.0.0",
+    "gulp-eslint": "^3.0.1",
+    "gulp-livereload": "^3.8.1",
+    "gulp-nodemon": "^2.2.1",
+    "gulp-sourcemaps": "^2.6.0",
     "istanbul": "^0.4.5",
     "mocha": "^3.3.0",
     "rimraf": "^2.6.1"
