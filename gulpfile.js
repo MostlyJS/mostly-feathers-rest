@@ -3,9 +3,6 @@ const babel = require('gulp-babel');
 const sourcemaps = require('gulp-sourcemaps');
 const changed = require('gulp-changed');
 const eslint = require('gulp-eslint');
-const makeCache = require('gulp-file-cache');
-
-const cache = new makeCache();
 
 gulp.task('lint', function() {
   return gulp.src('src/**/*.js')
