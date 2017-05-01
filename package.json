@@ -1,7 +1,7 @@
 {
-  "name": "mostly-rest",
+  "name": "mostly-feathers-rest",
   "version": "1.0.0",
-  "description": "MostlyJS microservice feathers rest api gateway",
+  "description": "MostlyJS microservice RESTful api for feathers",
   "author": "Forafish",
   "license": "MIT",
   "main": "index.js",
