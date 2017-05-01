@@ -24,7 +24,6 @@ import feathers from 'mostly-feathers-rest';
 
 const trans = new mostly(nats.connect()
 const app = express()
-  .use(compress())
   .use(bodyParser.json())
   .use(bodyParser.urlencoded({ extended: true }));
 
