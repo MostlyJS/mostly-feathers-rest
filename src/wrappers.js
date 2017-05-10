@@ -28,8 +28,8 @@ function getHandler (method, getArgs, mostly) {
     delete params.__service;
     delete params.__id;
 
-    // Grab the service parameters. Use req.payloads and set the query to req.query
-    params = Object.assign({ query: req.query || {} }, params, req.payloads);
+    // Grab the service parameters. Use req.feathers and set the query to req.query
+    params = Object.assign({ query: req.query || {} }, params, req.feathers);
 
     // Run the getArgs callback, if available, for additional parameters
     const [service, ...args] = getArgs(req, res, next);

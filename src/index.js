@@ -45,7 +45,7 @@ export default function rest(app, mostly, path, handler = formatter) {
 
   return function (req, res, next) {
 
-    req.payloads = { provider: 'rest' };
+    req.feathers = { provider: 'rest' };
 
     next();
   };
