@@ -58,8 +58,10 @@ function getHandler (method, getArgs, mostly) {
     mostly.act({
       topic: `feathers.${service}`,
       cmd: method,
+      path: req.path,
       args: args,
-      params: params
+      params: params,
+      feathers: req.feathers
     }, callback);
   };
 }

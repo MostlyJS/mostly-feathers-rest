@@ -44,9 +44,6 @@ export default function rest(app, mostly, path, handler = formatter) {
   idRoute.delete(wrappers.remove(mostly), handler);
 
   return function (req, res, next) {
-
-    req.feathers = { provider: 'rest' };
-
     next();
   };
 }
