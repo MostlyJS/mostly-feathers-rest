@@ -31,7 +31,11 @@ function getHandler (method, getArgs, mostly) {
     req.feathers = { provider: 'rest' };
 
     // Grab the service parameters. Use req.feathers and set the query to req.query
-    params = Object.assign({ query: req.query || {} }, params, req.feathers);
+    params = Object.assign({
+      query: req.query || {},
+      headers: req.headers || {},
+      //cookies: req.cookies || {}
+    }, params, req.feathers);
 
     // Run the getArgs callback, if available, for additional parameters
     const [service, ...args] = getArgs(req, res, next);
