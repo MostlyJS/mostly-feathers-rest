@@ -54,7 +54,47 @@ export default function rest(app, trans, path, handler = formatter) {
     return new DefaultService({ name, trans });
   };
 
+  app.setup = function() {
+    return app;
+  };
+
+  const _superUse = app.use;
+  app.use = function(fn) {
+    let offset = 0;
+
+    if (typeof fn !== 'function') {
+      var arg = fn;
+
+      while (Array.isArray(arg) && arg.length !== 0) {
+        arg = arg[0];
+      }
+
+      // first arg is the path
+      if (typeof arg !== 'function') {
+        offset = 1;
+      }
+    }
+    var service = arguments[offset];
+    if (typeof service !== 'function') {
+      return app;
+    } else {
+      return _superUse.apply(app, arguments);
+    }
+  };
+
+  const _superListen = app.listen;
+  app.listen = function() {
+    const server = _superListen.apply(this, arguments);
+
+    app.setup(server);
+
+    return server;
+  };
+
+  app.feathers = {};
+
   return function (req, res, next) {
+    req.feathers = { provider: 'rest' };
     next();
   };
 }
