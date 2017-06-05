@@ -20,7 +20,7 @@ const allowedMethods = {
 
 // A function that returns the middleware for a given method
 // `getArgs` is a function that should return additional leading service arguments
-function getHandler (method, getArgs, mostly) {
+function getHandler (method, getArgs, trans) {
   return function (req, res, next) {
     res.setHeader('Allow', _.uniq(Object.values(allowedMethods)).join(','));
 
@@ -59,7 +59,7 @@ function getHandler (method, getArgs, mostly) {
 
     debug(`REST handler calling service \`${service}\`, cmd \`${method}\`, with \`${args}\``);
 
-    mostly.act({
+    trans.act({
       topic: `feathers.${service}`,
       cmd: method,
       path: req.path,

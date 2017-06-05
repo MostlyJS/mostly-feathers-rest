@@ -1,5 +1,6 @@
 import makeDebug from 'debug';
 import wrappers from './wrappers';
+import { DefaultService } from 'mostly-feathers';
 
 const debug = makeDebug('mostly:feathers:rest');
 
@@ -15,7 +16,7 @@ function formatter(req, res, next) {
   });
 }
 
-export default function rest(app, mostly, path, handler = formatter) {
+export default function rest(app, trans, path, handler = formatter) {
   // Register the REST provider
   const uri = path || '';
   const baseRoute = app.route(`${uri}/:__service`);
@@ -24,24 +25,34 @@ export default function rest(app, mostly, path, handler = formatter) {
   debug(`Adding REST handler for service route \`${uri}\``);
 
   // GET / -> find(cb, params)
-  baseRoute.get(wrappers.find(mostly), handler);
+  baseRoute.get(wrappers.find(trans), handler);
   // POST / -> create(data, params, cb)
-  baseRoute.post(wrappers.create(mostly), handler);
+  baseRoute.post(wrappers.create(trans), handler);
   // PATCH / -> patch(null, data, params)
-  baseRoute.patch(wrappers.patch(mostly), handler);
+  baseRoute.patch(wrappers.patch(trans), handler);
   // PUT / -> update(null, data, params)
-  baseRoute.put(wrappers.update(mostly), handler);
+  baseRoute.put(wrappers.update(trans), handler);
   // DELETE / -> remove(null, params)
-  baseRoute.delete(wrappers.remove(mostly), handler);
+  baseRoute.delete(wrappers.remove(trans), handler);
 
   // GET /:id -> get(id, params, cb)
-  idRoute.get(wrappers.get(mostly), handler);
+  idRoute.get(wrappers.get(trans), handler);
   // PUT /:id -> update(id, data, params, cb)
-  idRoute.put(wrappers.update(mostly), handler);
+  idRoute.put(wrappers.update(trans), handler);
   // PATCH /:id -> patch(id, data, params, callback)
-  idRoute.patch(wrappers.patch(mostly), handler);
+  idRoute.patch(wrappers.patch(trans), handler);
   // DELETE /:id -> remove(id, params, cb)
-  idRoute.delete(wrappers.remove(mostly), handler);
+  idRoute.delete(wrappers.remove(trans), handler);
+
+  // patch configure
+  app.configure = function(fn) {
+    fn && fn.call(app, app);
+    return app;
+  };
+
+  app.service = function (name) {
+    return new DefaultService({ name, trans });
+  };
 
   return function (req, res, next) {
     next();
