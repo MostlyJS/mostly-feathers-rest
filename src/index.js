@@ -21,6 +21,7 @@ export default function rest(app, trans, path, handler = formatter) {
   const uri = path || '';
   const baseRoute = app.route(`${uri}/:__service`);
   const idRoute = app.route(`${uri}/:__service/:__id`);
+  const actionRoute = app.route(`${uri}/:__service/:__id/:__action`);
 
   debug(`Adding REST handler for service route \`${uri}\``);
 
@@ -43,6 +44,13 @@ export default function rest(app, trans, path, handler = formatter) {
   idRoute.patch(wrappers.patch(trans), handler);
   // DELETE /:id -> remove(id, params, cb)
   idRoute.delete(wrappers.remove(trans), handler);
+
+  // GET /:id -> action(id, params, cb)
+  actionRoute.get(wrappers.get(trans), handler);
+  // PUT /:id -> action(id, data, params, cb)
+  actionRoute.put(wrappers.update(trans), handler);
+  // PATCH /:id -> action(id, data, params, callback)
+  actionRoute.patch(wrappers.patch(trans), handler);
 
   // patch configure
   app.configure = function(fn) {

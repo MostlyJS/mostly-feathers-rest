@@ -57,7 +57,11 @@ function getHandler (method, getArgs, trans) {
       return next();
     };
 
-    debug(`REST handler calling service \`${service}\`, cmd \`${method}\`, with \`${args}\``);
+    debug(`REST handler calling service \'${service}\'`);
+    debug(` => cmd  \'${method}\'`);
+    debug(` => path \'${req.path}\'`);
+    debug(` => args %j`, args);
+    debug(` => params %j`, params);
 
     trans.act({
       topic: `feathers.${service}`,
