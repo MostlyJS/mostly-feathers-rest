@@ -40,9 +40,18 @@ function getHandler (method, getArgs, trans) {
     // Run the getArgs callback, if available, for additional parameters
     const [service, ...args] = getArgs(req, res, next);
 
+    debug(`REST handler calling service \'${service}\'`);
+    debug(` => cmd  \'${method}\'`);
+    debug(` => path \'${req.path}\'`);
+    debug(` => args %j`, args);
+    debug(` => params %j`, params);
+    
+    console.time(`  mostly:feathers:rest => ${service}.${method}`);
+
     // The service success callback which sets res.data or calls next() with the error
     const callback = function (err, data) {
-      debug(' ==> service response:', err, data);
+      debug(' => service response:', err, data);
+      console.timeEnd(`  mostly:feathers:rest => ${service}.${method}`);
       if (err) return next(err.cause || err);
 
       res.data = data;
@@ -56,12 +65,6 @@ function getHandler (method, getArgs, trans) {
 
       return next();
     };
-
-    debug(`REST handler calling service \'${service}\'`);
-    debug(` => cmd  \'${method}\'`);
-    debug(` => path \'${req.path}\'`);
-    debug(` => args %j`, args);
-    debug(` => params %j`, params);
 
     trans.act({
       topic: `feathers.${service}`,
