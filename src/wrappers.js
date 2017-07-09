@@ -29,7 +29,6 @@ function getHandler (method, getArgs, trans) {
     delete params.__id;
 
     req.feathers = { provider: 'rest' };
-
     // Grab the service parameters. Use req.feathers and set the query to req.query
     params = Object.assign({
       query: req.query || {},
@@ -37,14 +36,20 @@ function getHandler (method, getArgs, trans) {
       //cookies: req.cookies || {}
     }, params, req.feathers);
 
+    // Transfer the received file
+    if (req.file) {
+      params.file = req.file;
+    }
+
     // Run the getArgs callback, if available, for additional parameters
     const [service, ...args] = getArgs(req, res, next);
 
     debug(`REST handler calling service \'${service}\'`);
     debug(` => cmd  \'${method}\'`);
     debug(` => path \'${req.path}\'`);
-    debug(` => args %j`, args);
-    debug(` => params %j`, params);
+    debug(` => args`, args);
+    debug(` => params`, params);
+    debug(` => feathers`, req.feathers);
     
     console.time(`  mostly:feathers:rest => ${service}.${method}`);
 
