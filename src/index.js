@@ -21,7 +21,7 @@ export default function rest(app, trans, path, handler = formatter) {
   const uri = path || '';
   const baseRoute = app.route(`${uri}/:__service`);
   const idRoute = app.route(`${uri}/:__service/:__id`);
-  const actionRoute = app.route(`${uri}/:__service/:__id/:__action`);
+  const actionRoute = app.route(`${uri}/:__service/:__id/:__action(*)`);
 
   debug(`Adding REST handler for service route \`${uri}\``);
 
