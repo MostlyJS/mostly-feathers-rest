@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import fp from 'ramda';
 import makeDebug from 'debug';
 
 const debug = makeDebug('mostly:feathers:rest:wrappers');
@@ -22,7 +22,7 @@ const allowedMethods = {
 // `getArgs` is a function that should return additional leading service arguments
 function getHandler (method, getArgs, trans) {
   return function (req, res, next) {
-    res.setHeader('Allow', _.uniq(Object.values(allowedMethods)).join(','));
+    res.setHeader('Allow', Object.values(allowedMethods).join(','));
 
     let params = Object.assign({}, req.params || {});
     delete params.__service;
@@ -30,11 +30,12 @@ function getHandler (method, getArgs, trans) {
 
     req.feathers = { provider: 'rest' };
     // Grab the service parameters. Use req.feathers and set the query to req.query
-    params = Object.assign({
-      query: req.query || {},
-      headers: req.headers || {},
-      //cookies: req.cookies || {}
-    }, params, req.feathers);
+
+    let query = req.query || {};
+    let headers = fp.dissoc('cookie', req.headers || {});
+    let cookies = req.cookies || {};
+
+    params = Object.assign({ query, headers }, params, req.feathers);
 
     // Transfer the received file
     if (req.file) {

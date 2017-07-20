@@ -26,7 +26,8 @@
     "babel-polyfill": "^6.23.0",
     "debug": "^2.6.6",
     "gulp-watch": "^4.3.11",
-    "lodash": "^4.17.4"
+    "lodash": "^4.17.4",
+    "ramda": "^0.24.1"
   },
   "devDependencies": {
     "babel-core": "^6.24.1",
