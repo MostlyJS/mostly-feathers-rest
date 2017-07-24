@@ -12,7 +12,7 @@ gulp.task('lint', function() {
     .pipe(eslint.failAfterError())
 });
 
-gulp.task('compile', () => {
+gulp.task('compile', ['lint'], () => {
   return gulp.src('src/**/*.js')
     //.pipe(changed('lib'))
     .pipe(sourcemaps.init())
@@ -25,4 +25,4 @@ gulp.task('watch', () => {
   gulp.watch('src/**/*.js', ['lint', 'compile']);
 });
 
-gulp.task('default', ['watch', 'lint', 'compile']);
+gulp.task('default', ['watch']);
