@@ -51,6 +51,8 @@ export default function rest(app, trans, path, handler = formatter) {
   actionRoute.put(wrappers.update(trans), handler);
   // PATCH /:id -> action(id, data, params, callback)
   actionRoute.patch(wrappers.patch(trans), handler);
+  // DELETE /:id -> action(id, params, callback)
+  actionRoute.delete(wrappers.remove(trans), handler);
 
   // patch configure
   app.configure = function(fn) {
