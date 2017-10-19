@@ -1,6 +1,6 @@
 import makeDebug from 'debug';
 import wrappers from './wrappers';
-import { DefaultService } from 'mostly-feathers';
+import { ProxyService } from 'mostly-feathers';
 
 const debug = makeDebug('mostly:feathers:rest');
 
@@ -61,7 +61,7 @@ export default function rest(app, trans, path, handler = formatter) {
   };
 
   app.service = function (name) {
-    return new DefaultService({ name, trans });
+    return new ProxyService({ name, trans });
   };
 
   app.setup = function() {
