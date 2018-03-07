@@ -9,7 +9,7 @@ gulp.task('lint', function() {
     //.pipe(changed('lib'))
     .pipe(eslint())
     .pipe(eslint.format())
-    .pipe(eslint.failAfterError())
+    .pipe(eslint.failAfterError());
 });
 
 gulp.task('compile', ['lint'], () => {
