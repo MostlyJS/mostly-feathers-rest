@@ -21,7 +21,7 @@ var DEFAULT_PATH = '/ping';
  * Get system informaton
  * @param {Function} cb
  */
-function info(cb) {
+function info (cb) {
   var data = {
     name: pjson.name,
     message: 'pong',
@@ -45,7 +45,7 @@ export default function ping (path) {
   path = path || DEFAULT_PATH;
   return function (req, res, next) {
     if (req.path === path) {
-      info(function(err, data) {
+      info(function (err, data) {
         res.set('Content-Type', 'application/json');
         res.send(JSON.stringify(data, null, 2));
       });
@@ -53,5 +53,5 @@ export default function ping (path) {
       next();
     }
   };
-};
+}
 

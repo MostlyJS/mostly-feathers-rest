@@ -4,7 +4,7 @@ import { ProxyService } from 'mostly-feathers';
 
 const debug = makeDebug('mostly:feathers:rest');
 
-function formatter(req, res, next) {
+function formatter (req, res, next) {
   if (res.data === undefined) {
     return next();
   }
@@ -16,7 +16,7 @@ function formatter(req, res, next) {
   });
 }
 
-export default function rest(app, trans, path, handler = formatter) {
+export default function rest (app, trans, path, handler = formatter) {
   // Register the REST provider
   const uri = path || '';
   const baseRoute = app.route(`${uri}/:__service`);
@@ -55,7 +55,7 @@ export default function rest(app, trans, path, handler = formatter) {
   actionRoute.delete(wrappers.remove(trans), handler);
 
   // patch configure
-  app.configure = function(fn) {
+  app.configure = function (fn) {
     fn && fn.call(app, app);
     return app;
   };
@@ -64,12 +64,12 @@ export default function rest(app, trans, path, handler = formatter) {
     return new ProxyService({ name, trans });
   };
 
-  app.setup = function() {
+  app.setup = function () {
     return app;
   };
 
   const _superUse = app.use;
-  app.use = function(fn) {
+  app.use = function (fn) {
     let offset = 0;
 
     if (typeof fn !== 'function') {
@@ -93,7 +93,7 @@ export default function rest(app, trans, path, handler = formatter) {
   };
 
   const _superListen = app.listen;
-  app.listen = function() {
+  app.listen = function () {
     const server = _superListen.apply(this, arguments);
 
     app.setup(server);

@@ -1,5 +1,5 @@
-export default function profiler() {
-  return function(req, res, next) {
+export default function profiler () {
+  return function (req, res, next) {
     const tag = '[' + new Date().toISOString() + '] gateway profiler => ' + req.method + '  ' + req.url;
     console.time(tag);
     // The 'finish' event comes from core Node.js, it means Node is done handing
