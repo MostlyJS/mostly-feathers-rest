@@ -25,6 +25,7 @@
   "dependencies": {
     "babel-polyfill": "^6.23.0",
     "debug": "^2.6.6",
+    "esm": "^3.0.14",
     "gulp-watch": "^4.3.11",
     "lodash": "^4.17.4",
     "mkdirp": "^0.5.1"

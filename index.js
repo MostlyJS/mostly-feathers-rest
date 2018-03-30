@@ -1,5 +1,4 @@
-if (!global._babelPolyfill) { require('babel-polyfill'); }
-
-module.exports = require('./lib/index');
-module.exports.ping = require('./lib/ping');
-module.exports.profiler = require('./lib/profiler');
+require = require("esm")(module/*, options*/);
+module.exports = require('./src/index').default;
+module.exports.ping = require('./src/ping').default;
+module.exports.profiler = require('./src/profiler').default;
