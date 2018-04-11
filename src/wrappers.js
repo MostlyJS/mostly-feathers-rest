@@ -1,7 +1,7 @@
 import makeDebug from 'debug';
 import fp from 'mostly-func';
 
-const debug = makeDebug('mostly:feathers:rest:wrappers');
+const debug = makeDebug('mostly:feathers-rest:wrappers');
 
 const statusCodes = {
   created: 201,

@@ -2,7 +2,7 @@ import makeDebug from 'debug';
 import wrappers from './wrappers';
 import { ProxyService } from 'mostly-feathers';
 
-const debug = makeDebug('mostly:feathers:rest');
+const debug = makeDebug('mostly:feathers-rest');
 
 function formatter (req, res, next) {
   if (res.data === undefined) {
