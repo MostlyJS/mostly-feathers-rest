@@ -1,6 +1,6 @@
 {
   "name": "mostly-feathers-rest",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "MostlyJS microservice RESTful api for feathers",
   "author": "Forafish",
   "license": "MIT",
@@ -15,9 +15,13 @@
     "coverage": "istanbul cover node_modules/mocha/bin/_mocha -- --opts mocha.opts",
     "test": "npm run lint && npm run coverage"
   },
+  "homepage": "https://github.com/MostlyJS/mostly-feathers-rest#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MostlyJS/mostly-feathers-rest.git"
+  },
+  "bugs": {
+    "url": "https://github.com/MostlyJS/mostly-feathers-rest/issues"
   },
   "dependencies": {
     "debug": "^2.6.6",
