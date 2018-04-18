@@ -20,7 +20,7 @@ const allowedMethods = {
 
 // A function that returns the middleware for a given method
 // `getArgs` is a function that should return additional leading service arguments
-function getHandler (method, getArgs, trans) {
+function getHandler (method, getArgs, trans, domain = 'feathers') {
   return function (req, res, next) {
     res.setHeader('Allow', Object.values(allowedMethods).join(','));
 
@@ -73,7 +73,7 @@ function getHandler (method, getArgs, trans) {
     };
 
     trans.act({
-      topic: `feathers.${service}`,
+      topic: `${domain}.${service}`,
       cmd: method,
       path: req.path,
       args: args,

@@ -16,7 +16,7 @@ function formatter (req, res, next) {
   });
 }
 
-export default function rest (app, trans, path, handler = formatter) {
+export default function rest (app, trans, path, domain = 'feathers', handler = formatter) {
   // Register the REST provider
   const uri = path || '';
   const baseRoute = app.route(`${uri}/:__service`);
@@ -26,33 +26,33 @@ export default function rest (app, trans, path, handler = formatter) {
   debug(`Adding REST handler for service route \`${uri}\``);
 
   // GET / -> find(cb, params)
-  baseRoute.get(wrappers.find(trans), handler);
+  baseRoute.get(wrappers.find(trans, domain), handler);
   // POST / -> create(data, params, cb)
-  baseRoute.post(wrappers.create(trans), handler);
+  baseRoute.post(wrappers.create(trans, domain), handler);
   // PATCH / -> patch(null, data, params)
-  baseRoute.patch(wrappers.patch(trans), handler);
+  baseRoute.patch(wrappers.patch(trans, domain), handler);
   // PUT / -> update(null, data, params)
-  baseRoute.put(wrappers.update(trans), handler);
+  baseRoute.put(wrappers.update(trans, domain), handler);
   // DELETE / -> remove(null, params)
-  baseRoute.delete(wrappers.remove(trans), handler);
+  baseRoute.delete(wrappers.remove(trans, domain), handler);
 
   // GET /:id -> get(id, params, cb)
-  idRoute.get(wrappers.get(trans), handler);
+  idRoute.get(wrappers.get(trans, domain), handler);
   // PUT /:id -> update(id, data, params, cb)
-  idRoute.put(wrappers.update(trans), handler);
+  idRoute.put(wrappers.update(trans, domain), handler);
   // PATCH /:id -> patch(id, data, params, callback)
-  idRoute.patch(wrappers.patch(trans), handler);
+  idRoute.patch(wrappers.patch(trans, domain), handler);
   // DELETE /:id -> remove(id, params, cb)
-  idRoute.delete(wrappers.remove(trans), handler);
+  idRoute.delete(wrappers.remove(trans, domain), handler);
 
   // GET /:id -> action(id, params, cb)
-  actionRoute.get(wrappers.get(trans), handler);
+  actionRoute.get(wrappers.get(trans, domain), handler);
   // PUT /:id -> action(id, data, params, cb)
-  actionRoute.put(wrappers.update(trans), handler);
+  actionRoute.put(wrappers.update(trans, domain), handler);
   // PATCH /:id -> action(id, data, params, callback)
-  actionRoute.patch(wrappers.patch(trans), handler);
+  actionRoute.patch(wrappers.patch(trans, domain), handler);
   // DELETE /:id -> action(id, params, callback)
-  actionRoute.delete(wrappers.remove(trans), handler);
+  actionRoute.delete(wrappers.remove(trans, domain), handler);
 
   // patch configure
   app.configure = function (fn) {
@@ -61,7 +61,7 @@ export default function rest (app, trans, path, handler = formatter) {
   };
 
   app.service = function (name) {
-    return new ProxyService({ name, trans });
+    return new ProxyService({ name, domain, trans });
   };
 
   app.setup = function () {
