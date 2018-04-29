@@ -47,6 +47,8 @@ export default function rest (app, trans, path, domain = 'feathers', handler = f
 
   // GET /:id -> action(id, params, cb)
   actionRoute.get(wrappers.get(trans, domain), handler);
+  // POST /:id -> action(id, params, cb)
+  actionRoute.post(wrappers.create(trans, domain), handler);
   // PUT /:id -> action(id, data, params, cb)
   actionRoute.put(wrappers.update(trans, domain), handler);
   // PATCH /:id -> action(id, data, params, callback)
