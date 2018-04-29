@@ -26,7 +26,6 @@ function getHandler (method, getArgs, trans, domain = 'feathers') {
 
     let params = Object.assign({}, req.params || {});
     delete params.__service;
-    delete params.__id;
 
     req.feathers = { provider: 'rest' };
     // Grab the service parameters. Use req.feathers and set the query to req.query
