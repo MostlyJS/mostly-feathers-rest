@@ -19,9 +19,10 @@ function formatter (req, res, next) {
 export default function rest (app, trans, path, domain = 'feathers', handler = formatter) {
   // Register the REST provider
   const uri = path || '';
-  const baseRoute = app.route(`${uri}/:__service`);
-  const idRoute = app.route(`${uri}/:__service/:__id`);
-  const actionRoute = app.route(`${uri}/:__service/:__id/:__action(*)`);
+  const baseRoute = app.route(`${uri}/:service`);
+  const idRoute = app.route(`${uri}/:service/:id`);
+  const actionRoute = app.route(`${uri}/:service/:sid/:action`);
+  const actionIdRoute = app.route(`${uri}/:service/:sid/:action/:id(*)`);
 
   debug(`Adding REST handler for service route \`${uri}\``);
 
@@ -29,10 +30,10 @@ export default function rest (app, trans, path, domain = 'feathers', handler = f
   baseRoute.get(wrappers.find(trans, domain), handler);
   // POST / -> create(data, params, cb)
   baseRoute.post(wrappers.create(trans, domain), handler);
-  // PATCH / -> patch(null, data, params)
-  baseRoute.patch(wrappers.patch(trans, domain), handler);
   // PUT / -> update(null, data, params)
   baseRoute.put(wrappers.update(trans, domain), handler);
+  // PATCH / -> patch(null, data, params)
+  baseRoute.patch(wrappers.patch(trans, domain), handler);
   // DELETE / -> remove(null, params)
   baseRoute.delete(wrappers.remove(trans, domain), handler);
 
@@ -45,16 +46,25 @@ export default function rest (app, trans, path, domain = 'feathers', handler = f
   // DELETE /:id -> remove(id, params, cb)
   idRoute.delete(wrappers.remove(trans, domain), handler);
 
-  // GET /:id -> action(id, params, cb)
-  actionRoute.get(wrappers.get(trans, domain), handler);
-  // POST /:id -> action(id, params, cb)
-  actionRoute.post(wrappers.create(trans, domain), handler);
-  // PUT /:id -> action(id, data, params, cb)
-  actionRoute.put(wrappers.update(trans, domain), handler);
-  // PATCH /:id -> action(id, data, params, callback)
-  actionRoute.patch(wrappers.patch(trans, domain), handler);
-  // DELETE /:id -> action(id, params, callback)
-  actionRoute.delete(wrappers.remove(trans, domain), handler);
+  // GET /:sid/:action -> action(null, params, cb)
+  actionRoute.get(wrappers.action.find(trans, domain), handler);
+  // POST /:sid/:action -> action(data, params, cb)
+  actionRoute.post(wrappers.action.create(trans, domain), handler);
+  // PUT /:sid/:action -> action(null, data, params, cb)
+  actionRoute.put(wrappers.action.update(trans, domain), handler);
+  // PATCH /:sid/:action -> action(null, data, params, callback)
+  actionRoute.patch(wrappers.action.patch(trans, domain), handler);
+  // DELETE /:sid/:action -> action(null, params, callback)
+  actionRoute.delete(wrappers.action.remove(trans, domain), handler);
+
+  // GET /:sid/:action/:id -> action(id, params, cb)
+  actionIdRoute.get(wrappers.action.get(trans, domain), handler);
+  // PUT /:sid/:action/:id -> action(id, data, params, cb)
+  actionIdRoute.put(wrappers.action.update(trans, domain), handler);
+  // PATCH /:sid/:action/:id -> action(id, data, params, callback)
+  actionIdRoute.patch(wrappers.action.patch(trans, domain), handler);
+  // DELETE /:sid/:action/:id -> action(id, params, callback)
+  actionIdRoute.delete(wrappers.action.remove(trans, domain), handler);
 
   // patch configure
   app.configure = function (fn) {
