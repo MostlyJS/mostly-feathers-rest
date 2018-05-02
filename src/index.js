@@ -21,12 +21,13 @@ export default function rest (app, trans, path, domain = 'feathers', handler = f
   const uri = path || '';
   const baseRoute = app.route(`${uri}/:service`);
   const idRoute = app.route(`${uri}/:service/:id`);
-  const actionRoute = app.route(`${uri}/:service/:sid/:action`);
+  const actionRoute = app.route(`${uri}/:service/:id/:action`);
+  const actionBaseRoute = app.route(`${uri}/:service/:sid/:action`);
   const actionIdRoute = app.route(`${uri}/:service/:sid/:action/:id(*)`);
 
   debug(`Adding REST handler for service route \`${uri}\``);
 
-  // GET / -> find(cb, params)
+  // GET / -> find(params, cb)
   baseRoute.get(wrappers.find(trans, domain), handler);
   // POST / -> create(data, params, cb)
   baseRoute.post(wrappers.create(trans, domain), handler);
@@ -46,24 +47,25 @@ export default function rest (app, trans, path, domain = 'feathers', handler = f
   // DELETE /:id -> remove(id, params, cb)
   idRoute.delete(wrappers.remove(trans, domain), handler);
 
-  // GET /:sid/:action -> action(null, params, cb)
-  actionRoute.get(wrappers.action.find(trans, domain), handler);
-  // POST /:sid/:action -> action(data, params, cb)
-  actionRoute.post(wrappers.action.create(trans, domain), handler);
-  // PUT /:sid/:action -> action(null, data, params, cb)
-  actionRoute.put(wrappers.action.update(trans, domain), handler);
-  // PATCH /:sid/:action -> action(null, data, params, callback)
-  actionRoute.patch(wrappers.action.patch(trans, domain), handler);
-  // DELETE /:sid/:action -> action(null, params, callback)
-  actionRoute.delete(wrappers.action.remove(trans, domain), handler);
+  // PUT /:sid/:action -> action(id, data, params, cb)
+  actionRoute.put(wrappers.update(trans, domain), handler);
+  // PATCH /:sid/:action -> action(id, data, params, callback)
+  actionRoute.patch(wrappers.patch(trans, domain), handler);
+  // DELETE /:sid/:action -> action(id, params, callback)
+  actionRoute.delete(wrappers.remove(trans, domain), handler);
 
-  // GET /:sid/:action/:id -> action(id, params, cb)
+  // GET /:sid/:action -> find(params, cb)
+  actionBaseRoute.get(wrappers.action.find(trans, domain), handler);
+  // POST /:sid/:action -> create(data, params, cb)
+  actionBaseRoute.post(wrappers.action.create(trans, domain), handler);
+
+  // GET /:sid/:action/:id -> get(id, params, cb)
   actionIdRoute.get(wrappers.action.get(trans, domain), handler);
-  // PUT /:sid/:action/:id -> action(id, data, params, cb)
+  // PUT /:sid/:action/:id -> update(id, data, params, cb)
   actionIdRoute.put(wrappers.action.update(trans, domain), handler);
-  // PATCH /:sid/:action/:id -> action(id, data, params, callback)
+  // PATCH /:sid/:action/:id -> patch(id, data, params, callback)
   actionIdRoute.patch(wrappers.action.patch(trans, domain), handler);
-  // DELETE /:sid/:action/:id -> action(id, params, callback)
+  // DELETE /:sid/:action/:id -> remove(id, params, callback)
   actionIdRoute.delete(wrappers.action.remove(trans, domain), handler);
 
   // patch configure
