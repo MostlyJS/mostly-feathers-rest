@@ -27,7 +27,7 @@ function getHandler (method, getArgs, trans, domain = 'feathers') {
     let params = Object.assign({}, req.params || {});
     delete params.service;
     delete params.id;
-    //TODO delete params.action;
+    delete params.subresources;
 
     req.feathers = { provider: 'rest' };
     // Grab the service parameters. Use req.feathers and set the query to req.query
@@ -85,7 +85,7 @@ function getHandler (method, getArgs, trans, domain = 'feathers') {
 }
 
 // Returns no leading parameters
-function reqNone (req, action) {
+function reqNone (req) {
   return [ req.params.service ];
 }
 
@@ -104,24 +104,24 @@ function reqCreate (req) {
   return [ req.params.service, req.body ];
 }
 
-// Returns no leading parameters action
-function actionNone (req) {
-  return [ req.params.service + '/' + req.params.action ];
+// Returns no leading parameters subresources
+function subNone (req) {
+  return [ req.params.service + '/' + req.params.subresources ];
 }
 
-// Returns the leading parameters for a `get` or `remove` action (the id)
-function actionId (req) {
-  return [ req.params.service + '/' + req.params.action, fp.parseNil(req.params.id) ];
+// Returns the leading parameters for a `get` or `remove` subresources (the id)
+function subId (req) {
+  return [ req.params.service + '/' + req.params.subresources, fp.parseNil(req.params.id) ];
 }
 
-// Returns the leading parameters for an `update` or `patch` action (id, data)
-function actionUpdate (req) {
-  return [ req.params.service + '/' + req.params.action, fp.parseNil(req.params.id), req.body ];
+// Returns the leading parameters for an `update` or `patch` subresources (id, data)
+function subUpdate (req) {
+  return [ req.params.service + '/' + req.params.subresources, fp.parseNil(req.params.id), req.body ];
 }
 
-// Returns the leading parameters for a `create` action (data)
-function actionCreate (req) {
-  return [ req.params.service + '/' + req.params.action, req.body ];
+// Returns the leading parameters for a `create` subresources (data)
+function subCreate (req) {
+  return [ req.params.service + '/' + req.params.subresources, req.body ];
 }
 
 // Returns wrapped middleware for a service method.
@@ -132,12 +132,12 @@ export default {
   update: getHandler.bind(null, 'update', reqUpdate),
   patch: getHandler.bind(null, 'patch', reqUpdate),
   remove: getHandler.bind(null, 'remove', reqId),
-  action: {
-    find: getHandler.bind(null, 'find', actionNone),
-    get: getHandler.bind(null, 'get', actionId),
-    create: getHandler.bind(null, 'create', actionCreate),
-    update: getHandler.bind(null, 'update', actionUpdate),
-    patch: getHandler.bind(null, 'patch', actionUpdate),
-    remove: getHandler.bind(null, 'remove', actionId),
+  subresources: {
+    find: getHandler.bind(null, 'find', subNone),
+    get: getHandler.bind(null, 'get', subId),
+    create: getHandler.bind(null, 'create', subCreate),
+    update: getHandler.bind(null, 'update', subUpdate),
+    patch: getHandler.bind(null, 'patch', subUpdate),
+    remove: getHandler.bind(null, 'remove', subId),
   }
 };

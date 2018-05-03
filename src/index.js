@@ -22,8 +22,8 @@ export default function rest (app, trans, path, domain = 'feathers', handler = f
   const baseRoute = app.route(`${uri}/:service`);
   const idRoute = app.route(`${uri}/:service/:id`);
   const actionRoute = app.route(`${uri}/:service/:id/:action`);
-  const actionBaseRoute = app.route(`${uri}/:service/:sid/:action`);
-  const actionIdRoute = app.route(`${uri}/:service/:sid/:action/:id(*)`);
+  const subBaseRoute = app.route(`${uri}/:service/:sid/:subresources`);
+  const subIdRoute = app.route(`${uri}/:service/:sid/:subresources/:id(*)`);
 
   debug(`Adding REST handler for service route \`${uri}\``);
 
@@ -54,19 +54,19 @@ export default function rest (app, trans, path, domain = 'feathers', handler = f
   // DELETE /:sid/:action -> action(id, params, callback)
   actionRoute.delete(wrappers.remove(trans, domain), handler);
 
-  // GET /:sid/:action -> find(params, cb)
-  actionBaseRoute.get(wrappers.action.find(trans, domain), handler);
-  // POST /:sid/:action -> create(data, params, cb)
-  actionBaseRoute.post(wrappers.action.create(trans, domain), handler);
+  // GET /:sid/:subresources -> find(params, cb)
+  subBaseRoute.get(wrappers.subresources.find(trans, domain), handler);
+  // POST /:sid/:subresources -> create(data, params, cb)
+  subBaseRoute.post(wrappers.subresources.create(trans, domain), handler);
 
-  // GET /:sid/:action/:id -> get(id, params, cb)
-  actionIdRoute.get(wrappers.action.get(trans, domain), handler);
-  // PUT /:sid/:action/:id -> update(id, data, params, cb)
-  actionIdRoute.put(wrappers.action.update(trans, domain), handler);
-  // PATCH /:sid/:action/:id -> patch(id, data, params, callback)
-  actionIdRoute.patch(wrappers.action.patch(trans, domain), handler);
-  // DELETE /:sid/:action/:id -> remove(id, params, callback)
-  actionIdRoute.delete(wrappers.action.remove(trans, domain), handler);
+  // GET /:sid/:subresources/:id -> get(id, params, cb)
+  subIdRoute.get(wrappers.subresources.get(trans, domain), handler);
+  // PUT /:sid/:subresources/:id -> update(id, data, params, cb)
+  subIdRoute.put(wrappers.subresources.update(trans, domain), handler);
+  // PATCH /:sid/:subresources/:id -> patch(id, data, params, callback)
+  subIdRoute.patch(wrappers.subresources.patch(trans, domain), handler);
+  // DELETE /:sid/:subresources/:id -> remove(id, params, callback)
+  subIdRoute.delete(wrappers.subresources.remove(trans, domain), handler);
 
   // patch configure
   app.configure = function (fn) {
