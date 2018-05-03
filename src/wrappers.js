@@ -91,12 +91,12 @@ function reqNone (req, action) {
 
 // Returns the leading parameters for a `get` or `remove` request (the id)
 function reqId (req) {
-  return [ req.params.service, req.params.id || null ];
+  return [ req.params.service, fp.parseNil(req.params.id) ];
 }
 
 // Returns the leading parameters for an `update` or `patch` request (id, data)
 function reqUpdate (req) {
-  return [ req.params.service, req.params.id || null, req.body ];
+  return [ req.params.service, fp.parseNil(req.params.id), req.body ];
 }
 
 // Returns the leading parameters for a `create` request (data)
@@ -111,12 +111,12 @@ function actionNone (req) {
 
 // Returns the leading parameters for a `get` or `remove` action (the id)
 function actionId (req) {
-  return [ req.params.service + '/' + req.params.action, req.params.id || null ];
+  return [ req.params.service + '/' + req.params.action, fp.parseNil(req.params.id) ];
 }
 
 // Returns the leading parameters for an `update` or `patch` action (id, data)
 function actionUpdate (req) {
-  return [ req.params.service + '/' + req.params.action, req.params.id || null, req.body ];
+  return [ req.params.service + '/' + req.params.action, fp.parseNil(req.params.id), req.body ];
 }
 
 // Returns the leading parameters for a `create` action (data)
