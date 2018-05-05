@@ -23,7 +23,8 @@ export default function rest (app, trans, path, domain = 'feathers', handler = f
   const idRoute = app.route(`${uri}/:service/:id`);
   const actionRoute = app.route(`${uri}/:service/:id/:action`);
   const subBaseRoute = app.route(`${uri}/:service/:primary/:subresources`);
-  const subIdRoute = app.route(`${uri}/:service/:primary/:subresources/:id(*)`);
+  const subIdRoute = app.route(`${uri}/:service/:primary/:subresources/:id`);
+  const subActionRoute = app.route(`${uri}/:service/:primary/:subresources/:id/:action(*)`);
 
   debug(`Adding REST handler for service route \`${uri}\``);
 
@@ -68,6 +69,13 @@ export default function rest (app, trans, path, domain = 'feathers', handler = f
   // DELETE /:primary/:subresources/:id -> remove(id, params, callback)
   subIdRoute.delete(wrappers.subresources.remove(trans, domain), handler);
 
+  // PUT /:primary/:subresources/:id/:action -> action(id, data, params, cb)
+  subActionRoute.put(wrappers.subresources.update(trans, domain), handler);
+  // PATCH /:primary/:subresources/:id/:action -> action(id, data, params, callback)
+  subActionRoute.patch(wrappers.subresources.patch(trans, domain), handler);
+  // DELETE /:primary/:subresources/:id/:action -> action(id, params, callback)
+  subActionRoute.delete(wrappers.subresources.remove(trans, domain), handler);
+  
   // patch configure
   app.configure = function (fn) {
     fn && fn.call(app, app);
