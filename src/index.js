@@ -16,65 +16,84 @@ function formatter (req, res, next) {
   });
 }
 
-export default function rest (app, trans, path, domain = 'feathers', handler = formatter) {
+export default function rest (app, trans, path, customServices = [], domain = 'feathers', handler = formatter) {
   // Register the REST provider
   const uri = path || '';
-  const baseRoute = app.route(`${uri}/:service`);
-  const idRoute = app.route(`${uri}/:service/:id`);
-  const actionRoute = app.route(`${uri}/:service/:id/:action`);
-  const subBaseRoute = app.route(`${uri}/:service/:primary/:subresources`);
-  const subIdRoute = app.route(`${uri}/:service/:primary/:subresources/:id`);
-  const subActionRoute = app.route(`${uri}/:service/:primary/:subresources/:id/:action(*)`);
 
   debug(`Adding REST handler for service route \`${uri}\``);
 
-  // GET / -> find(params, cb)
-  baseRoute.get(wrappers.find(trans, domain), handler);
-  // POST / -> create(data, params, cb)
-  baseRoute.post(wrappers.create(trans, domain), handler);
-  // PUT / -> update(null, data, params)
-  baseRoute.put(wrappers.update(trans, domain), handler);
-  // PATCH / -> patch(null, data, params)
-  baseRoute.patch(wrappers.patch(trans, domain), handler);
-  // DELETE / -> remove(null, params)
-  baseRoute.delete(wrappers.remove(trans, domain), handler);
+  /** base route **/
+  const baseRoute = app.route(`${uri}/:service`)
+    // GET / -> find(params, cb)
+    .get(wrappers.find(trans, domain), handler)
+    // POST / -> create(data, params, cb)
+    .post(wrappers.create(trans, domain), handler)
+    // PUT / -> update(null, data, params)
+    .put(wrappers.update(trans, domain), handler)
+    // PATCH / -> patch(null, data, params)
+    .patch(wrappers.patch(trans, domain), handler)
+    // DELETE / -> remove(null, params)
+    .delete(wrappers.remove(trans, domain), handler);
 
-  // GET /:id -> get(id, params, cb)
-  idRoute.get(wrappers.get(trans, domain), handler);
-  // PUT /:id -> update(id, data, params, cb)
-  idRoute.put(wrappers.update(trans, domain), handler);
-  // PATCH /:id -> patch(id, data, params, callback)
-  idRoute.patch(wrappers.patch(trans, domain), handler);
-  // DELETE /:id -> remove(id, params, cb)
-  idRoute.delete(wrappers.remove(trans, domain), handler);
+  /** route for custom services that handle the route themselves **/
+  for (const service of customServices) {
+    const customRoute = app.route(`${uri}/:service(${service})/:id(*)`)
+      // GET /:id -> get(id, params, cb)
+      .get(wrappers.get(trans, domain), handler)
+      // PUT /:id -> update(id, data, params, cb)
+      .put(wrappers.update(trans, domain), handler)
+      // PATCH /:id -> patch(id, data, params, callback)
+      .patch(wrappers.patch(trans, domain), handler)
+      // DELETE /:id -> remove(id, params, cb)
+      .delete(wrappers.remove(trans, domain), handler);
+  }
 
-  // PUT /:primary/:action -> action(id, data, params, cb)
-  actionRoute.put(wrappers.update(trans, domain), handler);
-  // PATCH /:primary/:action -> action(id, data, params, callback)
-  actionRoute.patch(wrappers.patch(trans, domain), handler);
-  // DELETE /:primary/:action -> action(id, params, callback)
-  actionRoute.delete(wrappers.remove(trans, domain), handler);
+  /** id route **/
+  const idRoute = app.route(`${uri}/:service/:id`)
+    // GET /:id -> get(id, params, cb)
+    .get(wrappers.get(trans, domain), handler)
+    // PUT /:id -> update(id, data, params, cb)
+    .put(wrappers.update(trans, domain), handler)
+    // PATCH /:id -> patch(id, data, params, callback)
+    .patch(wrappers.patch(trans, domain), handler)
+    // DELETE /:id -> remove(id, params, cb)
+    .delete(wrappers.remove(trans, domain), handler);
 
-  // GET /:primary/:subresources -> find(params, cb)
-  subBaseRoute.get(wrappers.subresources.find(trans, domain), handler);
-  // POST /:primary/:subresources -> create(data, params, cb)
-  subBaseRoute.post(wrappers.subresources.create(trans, domain), handler);
+  /** action route */
+  const actionRoute = app.route(`${uri}/:service/:id/:action`)
+    // PUT /:primary/:action -> action(id, data, params, cb)
+    .put(wrappers.update(trans, domain), handler)
+    // PATCH /:primary/:action -> action(id, data, params, callback)
+    .patch(wrappers.patch(trans, domain), handler)
+    // DELETE /:primary/:action -> action(id, params, callback)
+    .delete(wrappers.remove(trans, domain), handler);
 
-  // GET /:primary/:subresources/:id -> get(id, params, cb)
-  subIdRoute.get(wrappers.subresources.get(trans, domain), handler);
-  // PUT /:primary/:subresources/:id -> update(id, data, params, cb)
-  subIdRoute.put(wrappers.subresources.update(trans, domain), handler);
-  // PATCH /:primary/:subresources/:id -> patch(id, data, params, callback)
-  subIdRoute.patch(wrappers.subresources.patch(trans, domain), handler);
-  // DELETE /:primary/:subresources/:id -> remove(id, params, callback)
-  subIdRoute.delete(wrappers.subresources.remove(trans, domain), handler);
+  /** subresources base route */
+  const subBaseRoute = app.route(`${uri}/:service/:primary/:subresources`)
+    // GET /:primary/:subresources -> find(params, cb)
+    .get(wrappers.subresources.find(trans, domain), handler)
+    // POST /:primary/:subresources -> create(data, params, cb)
+    .post(wrappers.subresources.create(trans, domain), handler);
 
-  // PUT /:primary/:subresources/:id/:action -> action(id, data, params, cb)
-  subActionRoute.put(wrappers.subresources.update(trans, domain), handler);
-  // PATCH /:primary/:subresources/:id/:action -> action(id, data, params, callback)
-  subActionRoute.patch(wrappers.subresources.patch(trans, domain), handler);
-  // DELETE /:primary/:subresources/:id/:action -> action(id, params, callback)
-  subActionRoute.delete(wrappers.subresources.remove(trans, domain), handler);
+  /** subresources id route */
+  const subIdRoute = app.route(`${uri}/:service/:primary/:subresources/:id`)
+    // GET /:primary/:subresources/:id -> get(id, params, cb)
+    .get(wrappers.subresources.get(trans, domain), handler)
+    // PUT /:primary/:subresources/:id -> update(id, data, params, cb)
+    .put(wrappers.subresources.update(trans, domain), handler)
+    // PATCH /:primary/:subresources/:id -> patch(id, data, params, callback)
+    .patch(wrappers.subresources.patch(trans, domain), handler)
+    // DELETE /:primary/:subresources/:id -> remove(id, params, callback)
+    .delete(wrappers.subresources.remove(trans, domain), handler);
+
+  /** subresources action route */
+  const subActionRoute = app.route(`${uri}/:service/:primary/:subresources/:id/:action(*)`)
+    // PUT /:primary/:subresources/:id/:action -> action(id, data, params, cb)
+    .put(wrappers.subresources.update(trans, domain), handler)
+    // PATCH /:primary/:subresources/:id/:action -> action(id, data, params, callback)
+    .patch(wrappers.subresources.patch(trans, domain), handler)
+    // DELETE /:primary/:subresources/:id/:action -> action(id, params, callback)
+    .delete(wrappers.subresources.remove(trans, domain), handler);
   
   // patch configure
   app.configure = function (fn) {
