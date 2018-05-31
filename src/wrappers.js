@@ -54,16 +54,13 @@ function getHandler (method, getArgs, trans, domain = 'feathers') {
       //params: params,
       //feathers: req.feathers
     });
-    
-    console.time(`  mostly:feathers:rest => ${service}.${method}`);
 
     // The service success callback which sets res.data or calls next() with the error
     const callback = function (err, data) {
-      debug(' => service response:', err, {
+      debug(`${service}.${method} response:`, err || {
         status: data && data.status,
         size: data && JSON.stringify(data).length
       });
-      console.timeEnd(`  mostly:feathers:rest => ${service}.${method}`);
       if (err) return next(err.cause || err);
 
       res.data = data;

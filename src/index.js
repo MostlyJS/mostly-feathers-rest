@@ -20,7 +20,7 @@ export default function rest (app, trans, path, customServices = [], domain = 'f
   // Register the REST provider
   const uri = path || '';
 
-  debug(`Adding REST handler for service route \`${uri}\``);
+  debug(`REST handler for service route \`${uri}\``);
 
   /** base route **/
   const baseRoute = app.route(`${uri}/:service`)
