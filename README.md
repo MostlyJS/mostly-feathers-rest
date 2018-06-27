@@ -5,6 +5,10 @@ MostlyJS Feathers Handler
 
 This module provides an express middleware as a RESTful gateway to call microservice writing with [mostly-feathers](https://github.com/MostlyJS/mostly-feathers).
 
+# Documentation
+
+Please see the [documentation site](https://mostlyjs.github.io).
+
 # Usage
 
 ## Installation
