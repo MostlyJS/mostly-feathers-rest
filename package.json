@@ -1,6 +1,6 @@
 {
   "name": "mostly-feathers-rest",
-  "version": "1.0.18",
+  "version": "1.0.19",
   "description": "MostlyJS microservice RESTful api for feathers",
   "author": "Forafish",
   "license": "MIT",
