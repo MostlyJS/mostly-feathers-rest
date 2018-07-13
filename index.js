@@ -1,4 +1,3 @@
-require = require("esm")(module/*, options*/);
-module.exports = require('./src/index').default;
-module.exports.ping = require('./src/ping').default;
-module.exports.profiler = require('./src/profiler').default;
+module.exports = require('./src/index');
+module.exports.ping = require('./src/ping');
+module.exports.profiler = require('./src/profiler');

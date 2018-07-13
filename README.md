@@ -20,11 +20,11 @@ npm install mostly-feathers-rest
 ## Quick Example
 
 ```javascript
-import express from 'express';
-import bodyParser from 'body-parser';
-import nats from 'nats';
-import mostly from 'mostly-node';
-import feathers from 'mostly-feathers-rest';
+const express = require('express');
+const bodyParser = require('body-parser');
+const nats = require('nats');
+const mostly = require('mostly-node');
+const feathers = require('mostly-feathers-rest');
 
 const trans = new mostly(nats.connect()
 const app = express()

@@ -1,5 +1,4 @@
-import os from 'os';
-import path from 'path';
+const os = require('os');
 
 function loadMainPackageJSON (attempts) {
   attempts = attempts || 1;
@@ -41,7 +40,7 @@ function info (cb) {
  * Ping health check express middleware
  * @param {String} path
  */
-export default function ping (path) {
+module.exports = function ping (path) {
   path = path || DEFAULT_PATH;
   return function (req, res, next) {
     if (req.path === path) {
@@ -53,5 +52,4 @@ export default function ping (path) {
       next();
     }
   };
-}
-
+};

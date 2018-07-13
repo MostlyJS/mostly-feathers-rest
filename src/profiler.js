@@ -1,6 +1,6 @@
 const timeDebug = (process.env.DEBUG || '').indexOf('mostly:*') >= 0;
 
-export default function profiler () {
+module.exports = function profiler () {
   return function (req, res, next) {
     const tag = `  mostly:feathers:rest:profiler ${req.method} ${req.url}`;
     if (timeDebug) console.time(tag);
@@ -11,4 +11,4 @@ export default function profiler () {
     });
     next();
   };
-}
+};

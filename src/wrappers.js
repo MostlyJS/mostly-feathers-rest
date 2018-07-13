@@ -1,5 +1,5 @@
-import makeDebug from 'debug';
-import fp from 'mostly-func';
+const makeDebug = require('debug');
+const fp = require('mostly-func');
 
 const debug = makeDebug('mostly:feathers-rest:wrappers');
 
@@ -127,7 +127,7 @@ function subCreate (req) {
 }
 
 // Returns wrapped middleware for a service method.
-export default {
+module.exports = {
   find: getHandler.bind(null, 'find', reqNone),
   get: getHandler.bind(null, 'get', reqId),
   create: getHandler.bind(null, 'create', reqCreate),

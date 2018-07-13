@@ -1,6 +1,6 @@
-import makeDebug from 'debug';
-import wrappers from './wrappers';
-import { ProxyService } from 'mostly-feathers';
+const makeDebug = require('debug');
+const wrappers = require('./wrappers');
+const { ProxyService } = require('mostly-feathers');
 
 const debug = makeDebug('mostly:feathers-rest');
 
@@ -16,7 +16,7 @@ function formatter (req, res, next) {
   });
 }
 
-export default function rest (app, trans, path, customServices = [], domain = 'feathers', handler = formatter) {
+module.exports = function rest (app, trans, path, customServices = [], domain = 'feathers', handler = formatter) {
   // Register the REST provider
   const uri = path || '';
 
@@ -148,5 +148,4 @@ export default function rest (app, trans, path, customServices = [], domain = 'f
     req.feathers = { provider: 'rest' };
     next();
   };
-}
-
+};
