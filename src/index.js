@@ -94,7 +94,7 @@ module.exports = function rest (app, trans, path, customServices = [], domain = 
     .patch(wrappers.subresources.patch(trans, domain), handler)
     // DELETE /:primary/:subresources/:id/:action -> action(id, params, callback)
     .delete(wrappers.subresources.remove(trans, domain), handler);
-  
+
   // patch configure
   app.configure = function (fn) {
     fn && fn.call(app, app);
