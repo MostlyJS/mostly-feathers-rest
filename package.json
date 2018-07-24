@@ -24,10 +24,7 @@
     "url": "https://github.com/MostlyJS/mostly-feathers-rest/issues"
   },
   "dependencies": {
-    "debug": "^2.6.6",
-    "gulp-watch": "^4.3.11",
-    "lodash": "^4.17.4",
-    "mkdirp": "^0.5.1"
+    "debug": "^2.6.6"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.2",
