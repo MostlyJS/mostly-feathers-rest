@@ -2,7 +2,11 @@
   "name": "mostly-feathers-rest",
   "version": "1.0.20",
   "description": "MostlyJS microservice RESTful api for feathers",
-  "author": "Forafish",
+  "author": {
+    "name": "mostly",
+    "email": "hello@playingio.com",
+    "url": "https://mostlyjs.github.com"
+  },
   "license": "MIT",
   "main": "index.js",
   "scripts": {
