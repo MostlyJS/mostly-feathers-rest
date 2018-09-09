@@ -44,6 +44,13 @@ function getHandler (method, getArgs, trans, domain = 'feathers') {
       params.file = req.file;
     }
 
+    // method override
+    if (method === 'update' 
+      && params.query.$method 
+      && params.query.$method.toLowerCase() === 'patch') {
+      method = 'patch'
+    }
+
     // Run the getArgs callback, if available, for additional parameters
     const [service, ...args] = getArgs(req, res, next);
 
