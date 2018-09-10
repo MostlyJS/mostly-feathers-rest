@@ -45,10 +45,11 @@ function getHandler (method, getArgs, trans, domain = 'feathers') {
     }
 
     // method override
-    if (method === 'update' 
+    if ((method === 'update' || method === 'patch')
       && params.query.$method 
       && params.query.$method.toLowerCase() === 'patch') {
       method = 'patch'
+      delete params.query.$method
     }
 
     // Run the getArgs callback, if available, for additional parameters
